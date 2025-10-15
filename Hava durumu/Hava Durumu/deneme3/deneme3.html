@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background: #e0f7fa;
+          color: #333;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .weather-card {
+          background: white;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          padding: 20px;
+          text-align: center;
+          width: 300px;
+        }
+        .weather-card h2 {
+          margin: 0 0 10px;
+        }
+        .temp {
+          font-size: 48px;
+          margin: 10px 0;
+        }
+        .description {
+          font-size: 20px;
+          text-transform: capitalize;
+          margin-bottom: 10px;
+        }
+        .details {
+          font-size: 14px;
+          margin-top: 15px;
+          line-height: 1.4;
+        }
+        .icon {
+          width: 100px;
+          height: 100px;
+        }
+      </style>
+</head>
+<body>
+    <div class="weather-box">
+        <h1>İstanbul</h1>
+        <img id="icon" class="icon" src="" alt="hava durumu">
+        <div class="temp" id="temp">--°C</div>
+        <div class="description" id="desc">Yükleniyor...</div>
+        <div class="details" id="details">Nem: --% | Rüzgar: -- m/s</div>
+      </div>
+    
+      <script>
+        const apiKey = 'BURAYA_API_ANAHTARINI_YAZ'; // OpenWeatherMap API anahtarını buraya yaz
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=Istanbul,TR&appid=${apiKey}&units=metric&lang=tr`;
+    
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            const temp = Math.round(data.main.temp);
+            const desc = data.weather[0].description;
+            const humidity = data.main.humidity;
+            const wind = data.wind.speed;
+            const icon = data.weather[0].icon;
+            const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+    
+            document.getElementById('temp').textContent = `${temp}°C`;
+            document.getElementById('desc').textContent = desc;
+            document.getElementById('details').textContent = `Nem: ${humidity}% | Rüzgar: ${wind} m/s`;
+            document.getElementById('icon').src = iconUrl;
+          })
+          .catch(error => {
+            document.getElementById('desc').textContent = 'Veri alınamadı';
+            console.error('Hata:', error);
+          });
+      </script>
+</body>
+</html>
